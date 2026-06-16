@@ -21,8 +21,8 @@ import report_builder as rb
 # CAU HINH — doc key tu st.secrets (.streamlit/secrets.toml khi local;
 # muc "Secrets" tren Streamlit Cloud khi deploy)
 # ============================================================
-ASSEMBLYAI_API_KEY = st.secrets["ASSEMBLYAI_API_KEY"]
-ANTHROPIC_API_KEY = st.secrets["ANTHROPIC_API_KEY"]
+ASSEMBLYAI_API_KEY = st.secrets["6f2b51229c0543cbbc93f60b4066446d"]
+ANTHROPIC_API_KEY = st.secrets["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"]
 CLAUDE_MODEL = st.secrets.get("CLAUDE_MODEL", "claude-sonnet-4-6")
 
 # Tu vung chuyen nganh -> giup STT nghe dung thuat ngu & viet tat.
