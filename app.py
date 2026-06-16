@@ -8,6 +8,7 @@ Cai dat: pip install streamlit assemblyai anthropic python-docx
 Chay:    streamlit run app.py
 """
 
+import os
 import tempfile
 import json
 
@@ -32,6 +33,9 @@ WORD_BOOST = [
 ]
 
 aai.settings.api_key = ASSEMBLYAI_API_KEY
+
+# Logo mac dinh di kem app (de canh app.py). Upload trong app se ghi de logo nay.
+DEFAULT_LOGO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "logo.jpg")
 
 
 # ============================================================
@@ -63,7 +67,9 @@ st.title("📝 Tạo biên bản cuộc họp")
 with st.sidebar:
     st.header("Thông tin cuộc họp")
     company = st.text_input("Tên công ty", "ARTIUS")
-    logo_file = st.file_uploader("Logo công ty (tùy chọn)", type=["png", "jpg", "jpeg"])
+    tagline = st.text_input("Slogan dưới logo", "BEYOND DESIGN AND BUILD")
+    logo_file = st.file_uploader("Logo công ty (tùy chọn, nền trắng/trong suốt)",
+                                 type=["png", "jpg", "jpeg"])
     title = st.text_input("Tiêu đề cuộc họp", "Họp giao ban tuần")
     date = st.text_input("Ngày họp", "")
     location = st.text_input("Địa điểm", "")
@@ -107,14 +113,15 @@ if "utts" in st.session_state:
         labeled = "\n".join(f"[{mapping[u['speaker']]}] {u['text']}" for u in utts)
 
         # Luu logo ra file tam (neu co)
-        logo_path = None
-        if logo_file:
-            with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as lf:
+        logo_path = DEFAULT_LOGO if os.path.exists(DEFAULT_LOGO) else None
+        if logo_file:  # nguoi dung upload -> ghi de logo mac dinh
+            suffix = "." + logo_file.name.split(".")[-1]
+            with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as lf:
                 lf.write(logo_file.getvalue())
                 logo_path = lf.name
 
         meta = {
-            "company": company, "title": title, "date": date,
+            "company": company, "tagline": tagline, "title": title, "date": date,
             "location": location, "objective": objective,
             "attendees": attendees, "logo_path": logo_path,
         }
